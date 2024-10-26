@@ -1,0 +1,260 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+
+<section class="ze-password-section">
+  
+  {% if section.settings.background != blank %}
+  <div class="ze-password-background">
+    <img class="ze-password-background-image" src="{{ section.settings.background | image_url }}" alt="backgrund image" width="" height="">
+  </div>
+  {% endif %}
+ 
+  <div class="ze-password-contents-row">
+     <div class="ze-password-logos">
+      <img src="{{ section.settings.logo__01 | image_url }}" alt="Logo" width="" height="">
+      <img src="{{ section.settings.logo__02 | image_url }}" alt="Logo" width="" height="">
+      <img src="{{ section.settings.logo__03 | image_url }}" alt="Logo" width="" height="">
+    </div>
+    
+    <div class="ze-password-contents">
+    {% for block in section.blocks %}
+      {% case block.type %}
+
+
+        {% comment %}
+        {% when 'logo' %}
+        
+        {% if block.settings.logo != blank %}
+            <div class="logo">
+              <img src="{{ block.settings.logo | image_url }}" alt="Logo" width="" height="">
+            </div>
+      {% endif %}
+        {% endcomment %}
+
+        
+    <!-- <div class="ze-password-box-content"> -->
+      {% when 'heading' %}
+      <h3 class="ze-password-heading">{{ block.settings.heading }}</h3>
+      {% when 'subheading' %}
+      <h2 class="ze-password-subheading">{{ block.settings.subheading }}</h2>
+        
+      <!-- <p class="ze-password-desc">
+      
+      </p> -->
+    <!-- </div> -->
+
+        {% when 'signup' %}
+    <!-- Password Sign Up form start here -->
+    <div class="ze-password-signup">
+      {% if block.settings.liquid != blank %}
+      <div class="ze-password-external-form">
+        {{ block.settings.liquid }}
+      </div>
+        {% else %}
+      {% form 'customer' %}
+        {{ form.errors | default_errors }}
+        <div class="input-group row">
+          <i class=" emailIcon ri-mail-line"></i>
+
+          <input type="hidden" name="customer[accepts_marketing]" value="true">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          <input class="ze-password-email" type="email" name="contact[email]" placeholder="Enter Email" required>
+
+          <button class="ze-password-submit btn--primary" type="submit">
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </div>
+        {% if form.posted_successfully? %}
+          <p class="ze-form-success-message"> Thnaks for subscribe, we will get in touch soon</p>
+          {% endif %}
+      {% endform %}
+    {% endif %}
+    </div>
+    <!-- Password Sign Up form end here -->
+        
+        {% when 'password' %}
+    <!-- Password Input Field Start Here -->
+    <div class="password-content-div">
+      <div class="password-form-wrapper">
+        <form
+          method="post"
+          action="/password"
+          id="login_form"
+          accept-charset="UTF-8"
+          class="storefront-password-form"
+        >
+          <input
+            type="hidden"
+            name="form_type"
+            value="storefront_password"
+
+          ><input type="hidden" name="utf8" value="✓">
+          <label for="password" class="hidden-label"></label>
+
+          <div class="input-group">
+            <i class="ri-git-repository-private-line lock"></i>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="input-group-field"
+              placeholder="{{ block.settings.placeholder }}"
+              autofocus="on"
+              required
+            >
+            <button
+              type="submit"
+              class="btn btn--primary password-page__login-form__submit"
+            >
+              <span class="fas fa-sign-in-alt" aria-hidden="true"></span>
+              <span class="sumbit-text"><i class="ri-arrow-right-line"></i></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Password Input Field End Here -->
+        {% endcase %}
+      {% endfor %}
+  </div>
+
+
+    {% comment %}
+    <div class="ze-password-image-wrapper"> 
+    <img src="{{ section.settings.image | image_url }}" alt="Logo" width="" height="">
+    </div>
+  {% endcomment %}
+    
+    </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lamb of God Clothing",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Backgorund Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "background",
+      "label": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo__01",
+      "label": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo__02",
+      "label": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo__03",
+      "label": "Logo"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Upload Your Logo"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "PRIVATE SALE COMING SOON"
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Sub Heading",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Sub Heading"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "label": "Sub Heading",
+          "default": "Start at 10th November 2024"
+        }
+      ]
+    },
+    {
+      "type": "signup",
+      "name" : "Sign Up",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Sign Up form"
+        },
+        {
+          "type": "liquid",
+          "id": "liquid",
+          "label": "External Form Code"
+        }
+      ]
+    },
+    {
+      "type": "password",
+      "name": "Passwrod",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Password Block"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder text",
+          "default": "Enter Your Password"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lamb of God Clothing",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "subheading"
+        },
+        {
+          "type": "signup"
+        },
+        {
+          "type": "password"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
